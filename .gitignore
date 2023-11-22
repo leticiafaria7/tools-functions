@@ -2,3 +2,4 @@
 
 *.gsheet
 states/
+py_env/
