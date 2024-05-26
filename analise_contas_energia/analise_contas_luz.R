@@ -40,11 +40,13 @@ ggplot(contas_luz) +
 
 # criar base de percentuais
 percentuais = contas_luz %>% 
-  select(ano_mes, `kwh/dia`, valor_a_pagar, preco_atual) %>% 
+  select(ano_mes, `kwh/dia`, valor_a_pagar, preco_atual, encargos_cobrancas) %>% 
   mutate(kwh_dia_pct = `kwh/dia` / max(`kwh/dia`),
          valor_a_pagar_pct = valor_a_pagar / max(valor_a_pagar),
-         preco_atual_pct = preco_atual / max(preco_atual)) %>% 
-  pivot_longer(cols = c(kwh_dia_pct, valor_a_pagar_pct, preco_atual_pct),
+         preco_atual_pct = preco_atual / max(preco_atual),
+         valor_a_pagar_normalizado = valor_a_pagar - encargos_cobrancas,
+         valor_a_pagar_normalizado_pct = valor_a_pagar_normalizado / max(valor_a_pagar_normalizado)) %>% 
+  pivot_longer(cols = c(kwh_dia_pct, valor_a_pagar_normalizado_pct, preco_atual_pct),
                names_to = 'propriedade',
                values_to = 'percentual') %>% 
   select(ano_mes, propriedade, percentual)
@@ -54,5 +56,8 @@ ggplot(percentuais) +
   geom_point() +
   geom_line() +
   expand_limits(y = 0)
+
+
+# valor multiplicado
 
 
