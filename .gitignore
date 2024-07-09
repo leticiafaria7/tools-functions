@@ -1,6 +1,8 @@
 # arquivos excel e gsheets
-
 *.gsheet
 states/
 py_env/
 analise_contas_energia/contas_luz.xlsx
+
+# pycache
+__pycache__

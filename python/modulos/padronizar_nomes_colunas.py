@@ -16,6 +16,12 @@ def padronizar_nomes_colunas(df_):
 		
     return nomes_padronizados
 
-# exemplo de uso
+# ------------------------------------------------------------------------------ #
+# exemplo
+# ------------------------------------------------------------------------------ #
+
+"""
 df = pd.DataFrame()
 df.columns = padronizar_nomes_colunas(df)
+
+"""

@@ -1,5 +1,6 @@
-
+# ------------------------------------------------------------------------------ #
 # inicializar um dicionário que terá um dicionário para cada chave
+# ------------------------------------------------------------------------------ #
 
 # sub dicionários
 def init_sub_dict(default_values: dict):
@@ -15,13 +16,19 @@ def init_dict(keys, dv):
         d[key] = init_sub_dict(dv)
     return d
 
+# ------------------------------------------------------------------------------ #
 # exemplo
+# ------------------------------------------------------------------------------ #
+
+"""
 default_dict = {
     'chave1':[],
     'chave2': '',
     'chave3': False
 }
 
-marcas = ['marca1', 'marca2', 'marca']
+keys = ['key1', 'key2', 'key3']
 
-dict_marcasw = init_dict(marcas, default_dict)
+dict_keys = init_dict(keys, default_dict)
+
+"""
