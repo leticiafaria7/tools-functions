@@ -1,3 +1,11 @@
+# proximos passos:
+# adicionar categoria "todos" no mês
+# adicionar percentual
+# adicionar legenda
+# adicionar outra visualização para cobrir o percentual
+# adicionar insights de onde dá para reduzir custos
+
+
 import streamlit as st
 import pandas as pd
 import seaborn as sns
