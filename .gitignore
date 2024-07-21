@@ -3,6 +3,10 @@
 states/
 py_env/
 analise_contas_energia/contas_luz.xlsx
+path_planilha.py
 
 # pycache
 __pycache__
+
+# notebooks de teste
+tratar_dados.ipynb
