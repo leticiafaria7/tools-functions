@@ -39,20 +39,25 @@ with col1:
     # Listas suspensas para seleção
     anos = df['ano'].unique()
     meses = df['mes'].unique()
-    opcoes_agrupamento = ['Desagrupado']
+    opcoes_agrupamento = ['Sim', 'Não']
 
     ano_selecionado = st.selectbox('Selecione o ano', anos)
     mes_selecionado = st.selectbox('Selecione o mês', meses)
+    agrupamento_selecionado = st.selectbox('Agrupar categorias?', opcoes_agrupamento)
 
 # Filtrar os dados com base na seleção do usuário
 dados_filtrados = df[(df['ano'] == ano_selecionado) & (df['mes'] == mes_selecionado)].copy()
 dados_filtrados = dados_filtrados.groupby(['macro', 'categoria']).agg({'valor':'sum'}).reset_index()
-dados_filtrados = dados_filtrados.sort_values('valor')
+
 
 with col2:
     # Função para plotar o gráfico
-    def plotar_grafico(df):
-        print(df.columns)
+    def plotar_grafico(df, agrupar):
+
+        if agrupar == 'Sim':
+            df = df.sort_values(['macro', 'valor'], ascending = [False, True])
+        else:
+            df = df.sort_values(['valor'], ascending = [True])
 
         colors = {
             'alimentação': '#d4d4d4', 
@@ -74,27 +79,28 @@ with col2:
 
         fig.add_trace(
             go.Bar(
-                x = dados_filtrados['valor'],
-                y = dados_filtrados['categoria'],
+                x = df['valor'],
+                y = df['categoria'],
                 orientation = 'h',
                 width = 0.6,
                 marker=dict(
-                    color=[colors[m] for m in dados_filtrados['macro']]
+                    color=[colors[m] for m in df['macro']]
                 ),
-                text=dados_filtrados['valor'].apply(lambda x: f'R$ {x:,.2f}'),
+                text=df['valor'].apply(lambda x: f'R$ {x:,.2f}'),
                 textposition=None,
                 hovertemplate='Valor: R$ %{x:,.2f}<br>Macro: %{customdata}<extra></extra>',
-                customdata=dados_filtrados['macro']
+                customdata=df['macro']
             )
         )
 
         fig.update_layout({'plot_bgcolor': 'rgba(0, 0, 0, 0)',
-                        'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
+                           'paper_bgcolor': 'rgba(0, 0, 0, 0)'})
 
         fig.update_layout(width=1200, 
-                        height=800,
-                        margin=dict(l=0, r=0, t=0, b=0))
+                          height=700,
+                          margin=dict(l=0, r=0, t=0, b=0))
+        
         st.plotly_chart(fig)
 
     # Plotar o gráfico com base na opção de agrupamento
-    plotar_grafico(dados_filtrados)
+    plotar_grafico(dados_filtrados, agrupamento_selecionado)
