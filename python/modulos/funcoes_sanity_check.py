@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 import textdistance as td
 
 # ----------------------------------------------------------------------------------------------------------------------- #
@@ -103,3 +104,47 @@ def find_similar_pairs(texts: pd.Series, threshold = 0.75):
                                         reverse = True)), axis = 1).apply(pd.Series)
     
     return df_similar_pairs.sort_values(['similarity'], ascending=False).reset_index(drop=True)
+
+# ----------------------------------------------------------------------------------------------------------------------- #
+# Função para calcular o balanceamento da base 
+# ----------------------------------------------------------------------------------------------------------------------- #
+
+# dentro da coluna 1, qual é a proporção de cada categoria da coluna 2?
+
+def calcular_balanceamento(df, coluna1, coluna2, metrica, print_series = False):
+
+    # função entropia
+    def entropy(proportions):
+        return -np.sum(proportions * np.log2(proportions + 1e-10))  # Adiciona um pequeno valor para evitar log(0)
+    
+    # função índice de gini
+    def gini_index(counts):
+        total = sum(counts)
+        sum_counts = sum([x * (total - x) for x in counts])
+        return sum_counts / (total**2)
+    
+    if metrica not in ['gini', 'entropia']:
+        return 'Métrica inválida'
+    
+    if metrica == 'gini':
+        normalize = False
+        metrica_title = 'Índice de Gini'
+        nome_coluna = 'count'
+        funcao = gini_index
+    
+    if metrica == 'entropia':
+        normalize = True
+        metrica_title = 'Entropia'
+        nome_coluna = 'proportion'
+        funcao = entropy
+    
+    class_counts = df.groupby(coluna1)[[coluna2]].value_counts(normalize = normalize).reset_index()
+
+    for cat in df[coluna2].unique():
+        series = class_counts[class_counts[coluna2] == cat][nome_coluna]
+        result = funcao(series)
+        print(cat)
+        if print_series:
+            print(series)
+        print(f'{metrica_title}: {round(result, 4)}')
+        print()
