@@ -54,6 +54,31 @@ def cont_perc_categorias(df_, coluna):
 
     return df_temp
 
+# ------------------------------------------------------------------------------------------------------- #
+# Função para mostrar a distribuição das categorias das colunas
+# ------------------------------------------------------------------------------------------------------- #
+
+def categorias_colunas(df, n_max = 12):
+    
+    for coluna in df.columns:
+        n_cat = df[coluna].nunique()
+        n_missings = df[coluna].isna().sum()
+        perc_missings = df[coluna].isna().mean()
+        if n_cat <= n_max:
+            print(f"Coluna: {coluna} | Qtd categorias: {n_cat} | Qtd missings: {n_missings} ({round(perc_missings * 100, 1)}%)")
+            print(df[coluna].value_counts(dropna = False))
+            print('-'*50)
+            print()
+
+    for coluna in df.columns:
+        n_cat = df[coluna].nunique()
+        n_missings = df[coluna].isna().sum()
+        perc_missings = df[coluna].isna().mean()
+        if n_cat > n_max:
+            print(f"Coluna: {coluna} | Qtd categorias: {n_cat} | Qtd missings: {n_missings} ({round(perc_missings * 100, 1)}%)")
+            print('-'*50)
+            print()
+
 # ----------------------------------------------------------------------------------------------------------------------- #
 # Função para encontrar pares de palavras similares (jaro-winkler)
 # ----------------------------------------------------------------------------------------------------------------------- #
