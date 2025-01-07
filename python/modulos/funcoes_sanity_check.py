@@ -173,3 +173,14 @@ def calcular_balanceamento(df, coluna1, coluna2, metrica, print_series = False):
             print(series)
         print(f'{metrica_title}: {round(result, 4)}')
         print()
+
+# ----------------------------------------------------------------------------------------------------------------------- #
+# Função para printar o horário do término da execução
+# ----------------------------------------------------------------------------------------------------------------------- #
+
+def horario_atual(texto = "Término da execução"):
+     from datetime import datetime
+     import pytz
+
+     hora_atual = datetime.now(pytz.timezone("America/Sao_Paulo"))
+     print(f"{texto}: {hora_atual.strftime('%d/%m/%Y %H:%M:%S')}")
