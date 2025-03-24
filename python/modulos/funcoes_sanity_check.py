@@ -184,3 +184,10 @@ def horario_atual(texto = "Término da execução"):
 
      hora_atual = datetime.now(pytz.timezone("America/Sao_Paulo"))
      print(f"{texto}: {hora_atual.strftime('%d/%m/%Y %H:%M:%S')}")
+
+# ----------------------------------------------------------------------------------------------------------------------- #
+# Função para printar um número com separador de milhar
+# ----------------------------------------------------------------------------------------------------------------------- #
+
+def sep_milhar(num, casas_decimais = 0):
+    return f"{num:,.{casas_decimais}f}".replace(",", ".")
