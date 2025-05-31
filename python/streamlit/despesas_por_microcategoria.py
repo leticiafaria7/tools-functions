@@ -6,6 +6,8 @@
 # adicionar insights de onde dá para reduzir custos
 # adicionar gráfico de linhas com o valor absoluto e os percentuais dos gastos de cada macro
 
+# ver dash: streamlit run python/streamlit/despesas_por_microcategoria.py
+
 
 import streamlit as st
 import pandas as pd
