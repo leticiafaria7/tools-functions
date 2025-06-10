@@ -97,16 +97,19 @@ dados_filtrados_categoria['text'] = '<b>R$ ' + dados_filtrados_categoria['valor_
 dados_filtrados_linhas = df[(df['ano'] == ano_selecionado) & (df['macro'] == macro_selecionada)]
 dados_filtrados_linhas = df[['mes_num', 'mes']].drop_duplicates().reset_index(drop = True)\
         .merge(dados_filtrados_linhas.groupby(['mes_num', 'mes'])['valor'].sum().reset_index(), on = ['mes_num', 'mes'], how = 'left').fillna(0)
+dados_filtrados_linhas['valor'] = dados_filtrados_linhas['valor'].round(2)
+dados_filtrados_linhas['valor_tratado'] = dados_filtrados_linhas['valor'].apply(lambda x: sep_milhar(x) + ',' + str(x).split('.')[1].ljust(2, '0'))
 
 # --------------------------------------------------------------------------------------------------------------------- #
 # Gráficos
 # --------------------------------------------------------------------------------------------------------------------- #
 
 with row2[0]:
-    # Função para plotar o gráfico
+
     st.text("")
     st.text("")
     st.markdown('##### Despesas por macrocategoria')
+
     def plotar_grafico_1(df):
 
         fig = go.Figure(layout = dict(barcornerradius = 5))
@@ -126,13 +129,14 @@ with row2[0]:
         
         st.plotly_chart(fig)
 
-    # Plotar o gráfico com base na opção de agrupamento
     plotar_grafico_1(dados_filtrados)
 
 with row2[1]:
+    
     st.text("")
     st.text("")
     st.markdown('##### Subcategorias (selecionar macro)')
+
     def plotar_grafico_2(df):
 
         fig = go.Figure(layout = dict(barcornerradius = 5))
@@ -155,13 +159,14 @@ with row2[1]:
 
     st.text("")
     st.markdown(f'##### Gastos mensais da macro em {ano_selecionado}')
+
     def plotar_grafico_3(df):
         fig = go.Figure()
         fig.add_trace(go.Scatter(x = df['mes'],
                               y = df['valor'],
-                            #   marker = dict(color = ['brown'] * 12),
                               line = dict(color = 'brown'),
-                              hovertemplate = 'Mês: %{x}<br><br>Total gasto: R$ %{y}<extra></extra>'))
+                              customdata = df['valor_tratado'],
+                              hovertemplate = 'Mês: %{x}<br><br>Total gasto: R$ %{customdata}<extra></extra>'))
         fig.add_shape(type = 'line', x0 = 0, x1 = 12, y0 = 0, y1 = 0, line = dict(width = 0.8, color = 'lightgray'))
         fig.update_layout(plot_bgcolor = 'rgba(0, 0, 0, 0)', paper_bgcolor = 'rgba(0, 0, 0, 0)', 
                         height = 250, width = 800,
