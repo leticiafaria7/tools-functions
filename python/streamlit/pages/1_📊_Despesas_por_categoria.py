@@ -39,7 +39,7 @@ df['ano'] = df['ano'].astype(int)
 
 st.header('📊 Despesas por categoria')
 
-row1 = st.columns([1, 2, 3])
+row1 = st.columns([1, 2, 2, 3])
 row2 = st.columns([1, 1])
 
 # --------------------------------------------------------------------------------------------------------------------- #
@@ -57,10 +57,12 @@ with row1[0]:
 with row1[1]:
     mes_selecionado = st.selectbox('Mês', meses)
 with row1[2]:
+    tipo_grafico = st.selectbox('Tipo de gráfico', ['Barras', 'Treemap'])
+with row1[3]:
     if mes_selecionado == 'todos os meses':
-        categorias = df[(df['ano'] == ano_selecionado)]['macro'].unique()
+        categorias = sorted(df[(df['ano'] == ano_selecionado)]['macro'].unique())
     else:
-        categorias = df[(df['ano'] == ano_selecionado) & (df['mes'] == mes_selecionado)]['macro'].unique()
+        categorias = sorted(df[(df['ano'] == ano_selecionado) & (df['mes'] == mes_selecionado)]['macro'].unique())
     macro_selecionada = st.selectbox('Macrocategoria', categorias)
 
 # --------------------------------------------------------------------------------------------------------------------- #
@@ -76,13 +78,13 @@ else:
     dados_filtrados_categoria = df[(df['ano'] == ano_selecionado) & (df['mes'] == mes_selecionado) & (df['macro'] == macro_selecionada)]
 
 # para gráfico 1
-dados_filtrados = dados_filtrados.groupby(['macro'])['valor'].sum().reset_index()
-dados_filtrados['total'] = dados_filtrados['valor'].sum()
-dados_filtrados['pct'] = round(dados_filtrados['valor'] * 100 / dados_filtrados['total'], 1)
-dados_filtrados = dados_filtrados.sort_values(['valor'], ascending = [True])
-dados_filtrados['valor'] = dados_filtrados['valor'].round(2)
-dados_filtrados['valor_tratado'] = dados_filtrados['valor'].apply(lambda x: sep_milhar(x) + ',' + str(x).split('.')[1].ljust(2, '0'))
-dados_filtrados['text'] = '<b>R$ ' + dados_filtrados['valor_tratado'].round(2).astype(str) + '</b> (' + dados_filtrados['pct'].astype(str) + '%)'
+dados_filtrados_1 = dados_filtrados.groupby(['macro'])['valor'].sum().reset_index()
+dados_filtrados_1['total'] = dados_filtrados_1['valor'].sum()
+dados_filtrados_1['pct'] = round(dados_filtrados_1['valor'] * 100 / dados_filtrados_1['total'], 1)
+dados_filtrados_1 = dados_filtrados_1.sort_values(['valor'], ascending = [True])
+dados_filtrados_1['valor'] = dados_filtrados_1['valor'].round(2)
+dados_filtrados_1['valor_tratado'] = dados_filtrados_1['valor'].apply(lambda x: sep_milhar(x) + ',' + str(x).split('.')[1].ljust(2, '0'))
+dados_filtrados_1['text'] = '<b>R$ ' + dados_filtrados_1['valor_tratado'].round(2).astype(str) + '</b> (' + dados_filtrados_1['pct'].astype(str) + '%)'
 
 # para gráfico 2
 dados_filtrados_categoria = dados_filtrados_categoria.groupby(['categoria'])['valor'].sum().reset_index()
@@ -99,6 +101,15 @@ dados_filtrados_linhas = df[['mes_num', 'mes']].drop_duplicates().reset_index(dr
         .merge(dados_filtrados_linhas.groupby(['mes_num', 'mes'])['valor'].sum().reset_index(), on = ['mes_num', 'mes'], how = 'left').fillna(0)
 dados_filtrados_linhas['valor'] = dados_filtrados_linhas['valor'].round(2)
 dados_filtrados_linhas['valor_tratado'] = dados_filtrados_linhas['valor'].apply(lambda x: sep_milhar(x) + ',' + str(x).split('.')[1].ljust(2, '0'))
+
+# para treemap
+dados_filtrados_treemap = dados_filtrados.groupby(['macro'])['valor'].sum().reset_index()
+dados_filtrados_treemap['total'] = dados_filtrados_treemap['valor'].sum()
+dados_filtrados_treemap['pct'] = round(dados_filtrados_treemap['valor'] * 100 / dados_filtrados_treemap['total'])
+dados_filtrados_treemap = dados_filtrados_treemap.sort_values(['valor'], ascending = [True])
+dados_filtrados_treemap['valor'] = dados_filtrados_treemap['valor'].round(2)
+dados_filtrados_treemap['text'] = dados_filtrados_treemap['valor'].apply(lambda x: sep_milhar(x) + ',' + str(x).split('.')[1].ljust(2, '0'))
+dados_filtrados_treemap['text'] = 'R$ ' + dados_filtrados_treemap['text'].round(2).astype(str) + '</b> (' + dados_filtrados_treemap['pct'].astype(str).apply(lambda x: x.split('.')[0]) + '%)'
 
 # --------------------------------------------------------------------------------------------------------------------- #
 # Gráficos
@@ -120,7 +131,7 @@ with row2[0]:
                             textposition = 'outside',
                             marker = dict(color = ['brown'] * df.shape[0]),
                             customdata = list(zip(df['pct'], df['valor_tratado'])),
-                            hovertemplate = '%{y}<br><br>Total gasto: R$ %{customdata[1]}<br>Proporção: %{customdata[0]}%<extra></extra>',
+                            hovertemplate = '%{y}<br><br>Total gasto: R$ %{customdata[1]}<br>Proporção: %{customdata[0]}<extra></extra>',
                             text = df['text']))
         fig.add_shape(type = 'line', x0 = 0, x1 = 0, y0 = -1, y1 = df.shape[0], line = dict(width = 0.8, color = 'lightgray'))
         fig.update_layout(plot_bgcolor = 'rgba(0, 0, 0, 0)', paper_bgcolor = 'rgba(0, 0, 0, 0)', height = 550, width = 800, 
@@ -129,13 +140,28 @@ with row2[0]:
         
         st.plotly_chart(fig)
 
-    plotar_grafico_1(dados_filtrados)
+    def plotar_grafico_treemap(df):
+        parents = ['']*len(df['macro'])
+
+        fig = go.Figure()
+        fig.add_trace(go.Treemap(labels = df['macro'], values = df['valor'], parents = parents, text = df['text'],
+                                textinfo = "label+text",
+                                hovertemplate='%{label}<br>%{text}<extra><extra>'))
+        fig.update_layout(plot_bgcolor = 'rgba(0, 0, 0, 0)', paper_bgcolor = 'rgba(0, 0, 0, 0)', height = 550, width = 800, 
+                          margin=dict(l=0, r=0, t=0, b=0), treemapcolorway = ['brown'])
+        fig.update_traces(marker=dict(cornerradius=5))
+        st.plotly_chart(fig)
+
+    if tipo_grafico == 'Barras':
+        plotar_grafico_1(dados_filtrados_1)
+    else:
+        plotar_grafico_treemap(dados_filtrados_treemap)
 
 with row2[1]:
     
     st.text("")
     st.text("")
-    st.markdown('##### Subcategorias (selecionar macro)')
+    st.markdown(f'##### Subcategorias de {macro_selecionada}')
 
     def plotar_grafico_2(df):
 
@@ -158,7 +184,7 @@ with row2[1]:
     plotar_grafico_2(dados_filtrados_categoria)
 
     st.text("")
-    st.markdown(f'##### Gastos mensais da macro em {ano_selecionado}')
+    st.markdown(f'##### Gastos mensais de {macro_selecionada} em {ano_selecionado}')
 
     def plotar_grafico_3(df):
         fig = go.Figure()
