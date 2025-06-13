@@ -129,28 +129,28 @@ with row2[0]:
     total_entradas = total_entradas['valor'].sum()
     total_entradas_trat = 'R$ ' + str(sep_milhar(round(total_entradas, 0))) + ',' + str(round(total_entradas, 2)).split('.')[1].ljust(2, '0')
 
-    st.text('')
-    st.markdown(f'''
-                ##### :green[{total_entradas_trat}]
-                :green[Total entradas]''')
+    st.markdown("<style>.small-font {font-size:14px !important; color:green !important; line-height:10px;}</style>", unsafe_allow_html=True)
+    st.markdown("<style>.big-font {font-size:27px !important; color:green !important; line-height:10px; font-weight:5px;}</style>", unsafe_allow_html=True)
+    st.markdown(f'<p class="big-font">{total_entradas_trat}</p>', unsafe_allow_html=True)
+    st.markdown('<p class="small-font">Total entradas</p>', unsafe_allow_html=True)
     
 with row2[1]:
     total_saidas = total_saidas['valor'].sum()
     total_saidas_trat = 'R$ ' + str(sep_milhar(round(total_saidas, 0))) + ',' + str(round(total_saidas, 2)).split('.')[1].ljust(2, '0')
 
-    st.text('')
-    st.markdown(f'''
-                ##### :red[{total_saidas_trat}]
-                :small[:red[Total saídas]]''')
+    st.markdown("<style>.small-font2 {font-size:14px !important; color:#ac3a4e !important; line-height:10px;}</style>", unsafe_allow_html=True)
+    st.markdown("<style>.big-font2 {font-size:27px !important; color:#ac3a4e !important; line-height:10px; font-weight:5px;}</style>", unsafe_allow_html=True)
+    st.markdown(f'<p class="big-font2">{total_saidas_trat}</p>', unsafe_allow_html=True)
+    st.markdown('<p class="small-font2">Total saídas</p>', unsafe_allow_html=True)
 
 with row2[2]:
     sobra = total_entradas - total_saidas
     sobra = 'R$ ' + str(sep_milhar(round(sobra, 0))) + ',' + str(round(sobra, 2)).split('.')[1].ljust(2, '0')
 
-    st.text('')
-    st.markdown(f'''
-                ##### :gray[{sobra}]
-                :gray[Sobra]''')
+    st.markdown("<style>.small-font3 {font-size:14px !important; color:gray !important; line-height:10px;}</style>", unsafe_allow_html=True)
+    st.markdown("<style>.big-font3 {font-size:27px !important; color:gray !important; line-height:10px; font-weight:5px;}</style>", unsafe_allow_html=True)
+    st.markdown(f'<p class="big-font3">{sobra}</p>', unsafe_allow_html=True)
+    st.markdown('<p class="small-font3">Sobra</p>', unsafe_allow_html=True)
 
 # --------------------------------------------------------------------------------------------------------------------- #
 # Gráficos
@@ -189,7 +189,7 @@ with row3[0]:
                                 textinfo = "label+text",
                                 hovertemplate='%{label}<br>%{text}<extra><extra>'))
         fig.update_layout(plot_bgcolor = 'rgba(0, 0, 0, 0)', paper_bgcolor = 'rgba(0, 0, 0, 0)', height = 450, width = 800, 
-                          margin=dict(l=0, r=0, t=0, b=0), treemapcolorway = ['gray'])
+                          margin=dict(l=0, r=0, t=0, b=0), treemapcolorway = ['brown'])
         fig.update_traces(marker=dict(cornerradius=5))
         st.plotly_chart(fig)
 
@@ -217,7 +217,7 @@ with row3[1]:
                             hovertemplate = '%{y}<br><br>Total gasto: R$ %{customdata[1]}<br>Proporção: %{customdata[0]}%<extra></extra>',
                             text = df['text']))
         fig.add_shape(type = 'line', x0 = 0, x1 = 0, y0 = -1, y1 = df.shape[0], line = dict(width = 0.8, color = 'lightgray'))
-        fig.update_layout(plot_bgcolor = 'rgba(0, 0, 0, 0)', paper_bgcolor = 'rgba(0, 0, 0, 0)',  height = 150, width = 800,
+        fig.update_layout(plot_bgcolor = 'rgba(0, 0, 0, 0)', paper_bgcolor = 'rgba(0, 0, 0, 0)',  height = 250, width = 800,
                           margin=dict(l=0, r=0, t=0, b=0))
         fig.update_xaxes(range = [0, df.valor.max() * 1.3])
         st.plotly_chart(fig)
@@ -236,7 +236,7 @@ with row3[1]:
                               hovertemplate = 'Mês: %{x}<br><br>Total gasto: R$ %{customdata}<extra></extra>'))
         fig.add_shape(type = 'line', x0 = 0, x1 = 12, y0 = 0, y1 = 0, line = dict(width = 0.8, color = 'lightgray'))
         fig.update_layout(plot_bgcolor = 'rgba(0, 0, 0, 0)', paper_bgcolor = 'rgba(0, 0, 0, 0)', 
-                        height = 250, width = 800,
+                        height = 150, width = 800,
                         margin=dict(l=0, r=0, t=0, b=0))
         fig.update_yaxes(range = [-df.valor.min() * 0.1, df.valor.max() * 1.3])
         st.plotly_chart(fig)
