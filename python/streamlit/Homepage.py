@@ -71,8 +71,8 @@ barras_emplilhadas['macro'] = pd.Categorical(barras_emplilhadas['macro'],
 barras_emplilhadas = barras_emplilhadas.sort_values(['macro', 'ano', 'mes_num', 'macro'])
 barras_emplilhadas['text'] = barras_emplilhadas['valor'].apply(lambda x: sep_milhar(x) + ',' + str(round(x, 2)).split('.')[1].ljust(2, '0'))
 
-dict_cores = {'investimentos':'#2d2d2d', 'casa':'#3E5461', 'saúde':'#5288db', 'alimentação':'#364D37',
-                                 'social':'#B0BB9B', 'transporte':'#511012', 'eletrônicos':'#DFA03F', 'vestuário':'white', 'outros':'gray'}
+dict_cores = {'vestuário':'#2d2d2d', 'transporte':'#3E5461', 'saúde':'#5288db', 'alimentação':'#364D37',
+              'social':'#B0BB9B', 'casa':'#511012', 'eletrônicos':'#DFA03F', 'investimentos':'white', 'outros':'gray'}
 
 if tipo_grafico == 'Percentual':
     eixo_y = 'pct'

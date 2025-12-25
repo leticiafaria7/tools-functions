@@ -13,3 +13,10 @@ tratar_dados.ipynb
 
 # apresentacoes
 Apresentação1.pptx
+
+# chaves de acesso
+config.py
+
+# ambientes virtuais
+venv/
+.venv/
