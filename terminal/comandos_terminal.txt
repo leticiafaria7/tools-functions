@@ -1,0 +1,60 @@
+# ============================== COMANDOS BÁSICOS ==============================
+
+pwd (mostrar diretório atual)
+cd (change directory)
+cls (limpa a tela no windows)
+clear (limpa a tela no bash ubuntu Linux)
+mkdir estudos (cria a pasta estudos)
+touch comandos.txt (criar um arquivo txt vazio)
+echo ls lista arquivos > comandos.txt (criar um arquivo txt com texto)
+cat comandos.txt (visualizar o conteúdo arquivo no terminal)
+echo clear - limpa a tela >> comandos.txt (adiciona mais texto no arquivo em vez de sobrescrever)
+mv dicas.txt anotações.txt (renomeia o arquivo)
+rmdir pasta_para_excluir (apaga uma pasta)
+rm dicas.txt (apaga o arquivo)
+cp anotações.txt estudos_terminal (cria uma cópia do arquivo para a pasta indicada)
+cp *.txt estudos_terminal (copia todos os arquivos txt para a pasta indicada)
+wc arquivo.txt (listar estatísticas do arquivo no formato n_linhas n_palavras n_caracteres)
+{comando} --help (documentação do comando)
+
+echo $PATH (lista as variáveis de ambiente - os caminhos em que o terminal procura quando digitamos o comando)
+export PATH=$PATH: /caminho/a/ser/adicionado
+
+# ============================== EDITOR DE TEXTO VI ==============================
+
+vi (abre o editor de texto)
+- escreve o texto
+- aperta esc
+- digita :w arquivo.txt (salva o arquivo)
+- digita :q (sai do editor)
+vi arquivo.txt (abre o arquivo)
+esc > :q! (sair sem salvar as alterações)
+
+esc para executar os atalhos abaixo
+- A (vai para o final da linha)
+- O (adiciona uma linha abaixo)
+- yy (copiar)
+- p (colar)
+- dd (recortar)
+- x (recortar)
+- :/termo_busca (localizar termos)
+- :s/Windows/Unix (substituir termos - windows por unix)
+- :x (salvar e sair)
+
+# ============================== COMPACTAR E DESCOMPACTAR ARQUIVOS ==============================
+
+zip -r pasta.zip pasta (-r é recursivamente)
+less pasta.zip (ver o que tem na pasta compactada)
+unzip pasta.zip (descompactar)
+rmdir -r pasta.zip (apagar a pasta)
+
+# ============================== iNSTALAR APLICAÇÕES ==============================
+
+# Instalar o MySQL Server no Ubuntu utilizando o APT (Advanced Packaging Tool), que é um gerenciador de pacotes
+# O sudo concede permissões de superusuário para realizar a instalação; é necessário para instalar programas no Linux
+
+sudo apt install mysql-server
+
+# Verifica o status do serviço MySQL, informando se ele está ativo e rodando
+
+systemctl status mysql
