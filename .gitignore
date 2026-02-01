@@ -20,3 +20,6 @@ config.py
 # ambientes virtuais
 venv/
 .venv/
+
+# teste docker
+node_modules/

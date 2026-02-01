@@ -1,0 +1,62 @@
+
+# ======================================================================================================= #
+# DOCKER
+# ======================================================================================================= #
+
+
+
+# ============================== CONCEITOS ==============================
+
+- Namespaces = garante que cada container tenha capacidade de se isolar em determinados níveis
+- Imagem = receita que se quer executar com várias camadas de instruções
+- Container = imagem que tem uma camada a mais de read and write
+
+[Dockerfile] --read--> [Imagem] --run--> [Container]
+
+- localhost:<porta do host> Ver a aplicação docker no navegador
+
+# ============================== EXECUÇÃO DO RUN ==============================
+
+1. Procura a imagem localmente
+2. Baixa a imagem caso não encontre localmente
+3. Valida o hash da imagem
+4. Docker então cria e executa o container a partir da imagem
+
+# ============================== COMANDOS NO TERMINAL ==============================
+
+- docker pull (puxa uma imagem sem criar um container a partir dela)
+- docker run <imagem> (cria um container a partir de uma imagem)
+- docker run <imagem> sleep infinity (faz com que o container fique em execução)
+- docker ps (lista os containers em execução e as respectivas imagens)
+- docker ps -a (lista todos os containers, inclusive os que não estão em execução)
+- docker stop <container_id> (para de executar o container)
+- docker start <container_id> (reexecutar o container)
+- docker exec -it <container_id> bash (executar de modo interativo - passamos a executar comandos dentro do terminal do container)
+- docker rm <container_id> (excluir o container)
+- docker run -it <imagem> bash (já cria o container no modo interativo e vai para o terminal dele)
+- docker run -d <imagem> (-d é detached, não trava o terminal enquanto executa o comando)
+- docker run -d -P <imagem> (-P é mapeamento da porta do container para a porta do host)
+- docker port <container_id> (para qual porta o container foi mapeado)
+- docker run -d -p 8080:80 <imagem> (mapeia a porta 80 do container para a 8080 do host)
+
+- docker images (lista as imagens disponíveis)
+- docker history <image_id> (mostra as camadas da imagem)
+- docker inspect <image_id>
+
+- docker build -t <username_docker>/<nome_imagem>:<versão ex: 1.0> (comando para construir a imagem docker a partir do Dockerfile, -t: tag, dar um nome e versão à imagem)
+
+# ============================== COMANDOS NO TERMINAL DO CONTAINER ==============================
+
+** Isolados pelo namespace **
+
+touch arquivo.txt (cria um arquivo)
+top (processos em execução do usuário root)
+q (sair da tela do top)
+exit (sair do terminal do container)
+
+# ============================== IMAGENS ==============================
+
+dockersamples/static-site
+
+
+
