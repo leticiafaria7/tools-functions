@@ -45,6 +45,8 @@
 
 - docker build -t <username_docker>/<nome_imagem>:<versão ex: 1.0> (comando para construir a imagem docker a partir do Dockerfile, -t: tag, dar um nome e versão à imagem)
 
+- docker login -u leticiafaria7 (fazer login no docker hub para subir a imagem para lá)
+
 # ============================== COMANDOS NO TERMINAL DO CONTAINER ==============================
 
 ** Isolados pelo namespace **
@@ -59,4 +61,7 @@ exit (sair do terminal do container)
 dockersamples/static-site
 
 
+# ============================== DOCKERFILE ==============================
 
+ARG = define variáveis que serão usadas apenas durante o processo de construção da IMAGEM (no momento da build). por exemplo, define a porta que será usada na imagem. não são acessíveis no container em execução
+ENV = define variáveis de ambiente que serão disponibilizadas dentro do container quando ele for executado
